@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+
+if [[ $P3WM_DEBUG = 1 ]]; then
+  set -x
+fi
+
+if [[ -z $P3WM_MERGE_TOOL ]]; then
+  P3WM_MERGE_TOOL=""
+fi
+
+shopt -s nullglob
+
+if [[ ! -f $1 ]]; then
+  cat <<EOF
+Usage: p3wm <pacnew file>
+
+Example: \`\`p3wm /etc/pacman.d/mirrorlist.pacnew''
+EOF
+  exit 1
+fi
+
+set -eu
+
+get_ver_tuple() {
+  tac /var/log/pacman.log \
+    | sed -Ene "/\\[ALPM\\] upgraded $1 / !d" \
+      -e 's/.*\(([^ ]+) -> ([^)]+).*/\1 \2/p' -e q
+}
+
+get_pkg_arch() {
+  pacman -Qi "$1" | awk '$1 ~ "Architecture" {print $3}'
+}
+
+merge_tool() {
+  if [[ -z $P3WM_MERGE_TOOL ]]; then
+    merge_tool_vim "$@"
+  else
+    eval "$P3WM_MERGE_TOOL"
+  fi
+}
+
+merge_tool_vim() {
+  vim -f -d -c '4wincmd w | wincmd J' "$@"
+}
+
+main() {
+  bf_pacnew="$(realpath "$1")"
+  bf_local="${bf_pacnew%.pacnew}"
+  pkg_name="$(pacman -Qoq "$bf_local")"
+  if [[ $bf_pacnew = "$bf_local" ]]; then
+    echo 'You done messed up'
+    exit 3
+  fi
+
+  ver_tuple="$(get_ver_tuple "$pkg_name")"
+  oldver="${ver_tuple% *}"
+
+  arch="$(get_pkg_arch "$pkg_name")"
+  basename=$(basename "$bf_local")
+  bf_base="$(mktemp --suffix ".base.$basename")"
+
+  pkg_cached=""
+  for f in /var/cache/pacman/pkg/"$pkg_name"-"$oldver"-"$arch".pkg.* ; do
+    pkg_cached="$f"
+  done
+
+  if [[ -z $pkg_cached ]]; then
+    echo "Unable to find package \`\`$pkg_name-$oldver-$arch'' in cache"
+    exit 2
+  fi
+
+  bf_id="${bf_local#/}"
+  tar xOf "$pkg_cached" "$bf_id" -- > "$bf_base"
+  bf_merged="$(mktemp --suffix ".merged.$basename")"
+
+  if git merge-file -p "$bf_local" "$bf_base" "$bf_pacnew" > "$bf_merged"
+  then
+    echo M "$bf_local"
+  else
+    echo C "$bf_local"
+    merge_tool "$bf_local" "$bf_base" "$bf_pacnew" "$bf_merged"
+  fi
+
+  chmod --reference="$bf_local" "$bf_merged"
+  mv -i "$bf_merged" "$bf_local"
+  rm -i "$bf_pacnew"
+}
+
+if [[ "$0" = "${BASH_SOURCE[0]}" ]]; then
+  main "$@"
+fi
