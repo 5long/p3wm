@@ -4,10 +4,16 @@ if [[ $P3WM_DEBUG = 1 ]]; then
   set -x
 fi
 
-# To use a different merge tool, set an envvar like this:
-# export P3WM_MERGE_TOOL='meld $1 $2 $3 --output=$4'
 if [[ -z $P3WM_MERGE_TOOL ]]; then
-  P3WM_MERGE_TOOL=''
+  if type -P meld >/dev/null; then
+    P3WM_MERGE_TOOL='meld --auto-merge $1 $2 $3 -o $4'
+  elif type -P vim >/dev/null; then
+    P3WM_MERGE_TOOL='vim -f -d -c "4wincmd w | wincmd J" "$@"'
+  else
+    echo No merge tool available.
+    echo "Please install vim / meld, or set a custom \`\`\$P3WM_MERGE_TOOL''"
+    exit 4
+  fi
 fi
 
 shopt -s nullglob
