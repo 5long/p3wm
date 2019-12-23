@@ -90,6 +90,7 @@ main() {
   fi
 
   chmod --reference="$bf_local" "$bf_merged"
+  set -x
   mv -i "$bf_merged" "$bf_local"
   rm -i "$bf_pacnew"
 }
