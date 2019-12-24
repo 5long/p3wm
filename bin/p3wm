@@ -4,14 +4,14 @@ if [[ $P3WM_DEBUG = 1 ]]; then
   set -x
 fi
 
-if [[ -z $P3WM_MERGE_TOOL ]]; then
+if [[ -z $P3WM_RESOLVE_TOOL ]]; then
   if type -P meld >/dev/null; then
-    P3WM_MERGE_TOOL='meld --auto-merge "$LOCAL" "$BASE" "$REMOTE" -o "$MERGED"'
+    P3WM_RESOLVE_TOOL='meld --auto-merge "$LOCAL" "$BASE" "$REMOTE" -o "$MERGED"'
   elif type -P vim >/dev/null; then
-    P3WM_MERGE_TOOL='vim -f -d -c "4wincmd w | wincmd J" "$@"'
+    P3WM_RESOLVE_TOOL='vim -f -d -c "4wincmd w | wincmd J" "$@"'
   else
-    echo No merge tool available.
-    echo "Please install vim / meld, or set a custom \`\`\$P3WM_MERGE_TOOL''"
+    echo No resolve tool available.
+    echo "Please install vim / meld, or set a custom \`\`\$P3WM_RESOLVE_TOOL''"
     exit 4
   fi
 fi
@@ -39,9 +39,9 @@ get_pkg_arch() {
   pacman -Qi "$1" | awk '$1 ~ "Architecture" {print $3}'
 }
 
-merge_tool() {
+resolve_tool() {
   local LOCAL="$1" BASE="$2" REMOTE="$3" MERGED="$4"
-  eval "$P3WM_MERGE_TOOL"
+  eval "$P3WM_RESOLVE_TOOL"
 }
 
 merge_tool_vim() {
@@ -83,7 +83,7 @@ main() {
     echo M "$bf_local"
   else
     echo C "$bf_local"
-    merge_tool "$bf_local" "$bf_base" "$bf_pacnew" "$bf_merged"
+    resolve_tool "$bf_local" "$bf_base" "$bf_pacnew" "$bf_merged"
   fi
 
   chmod --reference="$bf_local" "$bf_merged"
