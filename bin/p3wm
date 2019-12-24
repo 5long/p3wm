@@ -15,16 +15,29 @@ find_resolve_tool() {
   fi
 
   if has_bin kdiff3; then
-    P3WM_RESOLVE_TOOL='kdiff3 --auto -o "$MERGED" "$BASE" "$LOCAL" "$REMOTE"'
+    P3WM_RESOLVE_TOOL=builtin_resolve_kdiff3
   elif has_bin meld; then
-    P3WM_RESOLVE_TOOL='meld --auto-merge "$LOCAL" "$BASE" "$REMOTE" -o "$MERGED"'
+    P3WM_RESOLVE_TOOL=builtin_resolve_meld
   elif has_bin vim; then
-    P3WM_RESOLVE_TOOL='vim -f -d -c "4wincmd w | wincmd J" "$@"'
+    P3WM_RESOLVE_TOOL=builtin_resolve_vim
   else
     echo No resolve tool available.
     echo "Please install vim / meld / kdiff3, or set a custom ‘\$P3WM_RESOLVE_TOOL’"
+    echo "See p3wm(8) for details"
     exit 4
   fi
+}
+
+builtin_resolve_kdiff3() {
+  kdiff3 --auto -o "$MERGED" "$BASE" "$LOCAL" "$REMOTE"
+}
+
+builtin_resolve_meld() {
+  meld --auto-merge "$LOCAL" "$BASE" "$REMOTE" -o "$MERGED"
+}
+
+builtin_resolve_vim() {
+  vim -f -d -c "4wincmd w | wincmd J" "$LOCAL" "$BASE" "$REMOTE" "$MERGED"
 }
 
 has_bin() {
