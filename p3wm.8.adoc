@@ -23,7 +23,7 @@ p3wm tries to merge a .pacnew file into its corresponding local backup (in the s
   - git-merge-file(1)
   - merge(1)
 
-*Note*: in git(1)'s terms, git launches a "merge tool" to resolve merge conflicts. But in p3wm's terms, we use a merge to merge, and use a resolve tool to resolve conflicts if there are any.
+*Note*: in git(1)'s terms, git launches a "merge tool" to resolve merge conflicts. But in p3wm's terms, we use a merge tool to merge, and use a resolve tool to resolve conflicts if there are any.
 
 *P3WM_CMD_RESOLVE*::
   Override default resolve tool. If unset, p3wm will detect existing resolve tools in the following order:
