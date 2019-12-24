@@ -14,6 +14,25 @@ find_resolve_tool() {
   fi
 }
 
+has_bin() {
+  type -P "$1" >/dev/null
+}
+
+find_merge_tool() {
+  if [[ -n $P3WM_MERGE_TOOL ]]; then
+    return
+  fi
+
+  if has_bin git; then
+    P3WM_MERGE_TOOL="git merge-file -p"
+  elif has_bin merge; then
+    P3WM_MERGE_TOOL="merge -p"
+  else
+    echo No merge tool available.
+    echo "Please install git / rcs, or set a custom \`\`\$P3WM_MERGE_TOOL''"
+  fi
+}
+
 
 get_ver_tuple() {
   tac /var/log/pacman.log \
@@ -38,6 +57,7 @@ main() {
   set -e
   shopt -s nullglob
 
+  find_merge_tool
   find_resolve_tool
 
   if [[ ! -f $1 ]]; then
