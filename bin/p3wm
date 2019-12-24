@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+tmpdir="${TMPDIR:-/tmp}/p3wm"
+create_tmp_root() {
+  mkdir -p "$tmpdir"
+}
+
+mktmp() {
+  mktemp -p "$tmpdir" --suffix "$@"
+}
+
 find_resolve_tool() {
   if [[ -n $P3WM_RESOLVE_TOOL ]]; then
     return
@@ -62,6 +71,7 @@ main() {
   set -e
   shopt -s nullglob
 
+  create_tmp_root
   find_merge_tool
   find_resolve_tool
 
@@ -89,7 +99,7 @@ EOF
 
   arch="$(get_pkg_arch "$pkg_name")"
   basename=$(basename "$bf_local")
-  bf_base="$(mktemp --suffix ".base.$basename")"
+  bf_base="$(mktmp ".base.$basename")"
 
   pkg_cached=""
   for f in /var/cache/pacman/pkg/"$pkg_name"-"$oldver"-"$arch".pkg.* ; do
@@ -103,7 +113,7 @@ EOF
 
   bf_id="${bf_local#/}"
   tar xOf "$pkg_cached" "$bf_id" -- > "$bf_base"
-  bf_merged="$(mktemp --suffix ".merged.$basename")"
+  bf_merged="$(mktmp ".merged.$basename")"
 
   if git merge-file -p "$bf_local" "$bf_base" "$bf_pacnew" > "$bf_merged"
   then
