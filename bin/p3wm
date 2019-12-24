@@ -86,6 +86,10 @@ resolve_tool() {
   eval "$P3WM_RESOLVE_TOOL"
 }
 
+ask_for_action() {
+  printf "(V)iew diff, (D)elete .pacnew, (A)ccept merge, (R)un resolve tool, (Q)uit? "
+}
+
 main() {
   if [[ $P3WM_DEBUG = 1 ]]; then
     set -x
@@ -147,16 +151,38 @@ EOF
 
   if "$P3WM_MERGE_TOOL" "$bf_local" "$bf_base" "$bf_pacnew" > "$bf_merged"
   then
-    echo M "$bf_local"
+    echo M "$bf_local" "can be cleanly merged"
   else
-    echo C "$bf_local"
-    resolve_tool "$bf_local" "$bf_base" "$bf_pacnew" "$bf_merged"
+    echo C "$bf_local" "cannot be cleanly merged"
   fi
 
   chmod --reference="$bf_local" "$bf_merged"
-  set -x
-  mv -i "$bf_merged" "$bf_local"
-  rm -i "$bf_pacnew"
+
+  while ask_for_action; read -r answer; do
+    case "$answer" in
+      q|Q)
+        return 0
+        ;;
+      v|V)
+        diff -u "$bf_local" "$bf_merged" ||:
+        ;;
+      d|D)
+        rm -v "$bf_pacnew"
+        return 0
+        ;;
+      a|A)
+        mv -v "$bf_merged" "$bf_local"
+        rm -v "$bf_pacnew"
+        return 0
+        ;;
+      r|R)
+        resolve_tool "$bf_local" "$bf_base" "$bf_pacnew" "$bf_merged" ||:
+        ;;
+      *)
+        echo "Action not understood."
+        ;;
+    esac
+  done
 }
 
 if [[ "$0" = "${BASH_SOURCE[0]}" ]]; then
