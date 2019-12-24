@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-if [[ $P3WM_DEBUG = 1 ]]; then
-  set -x
-fi
-
 find_resolve_tool() {
   if [[ -z $P3WM_RESOLVE_TOOL ]]; then
     if type -P meld >/dev/null; then
@@ -18,16 +14,6 @@ find_resolve_tool() {
   fi
 }
 
-shopt -s nullglob
-
-if [[ ! -f $1 ]]; then
-  cat <<EOF
-Usage: p3wm <pacnew file>
-
-Example: \`\`p3wm /etc/pacman.d/mirrorlist.pacnew''
-EOF
-  exit 1
-fi
 
 get_ver_tuple() {
   tac /var/log/pacman.log \
@@ -45,9 +31,23 @@ resolve_tool() {
 }
 
 main() {
+  if [[ $P3WM_DEBUG = 1 ]]; then
+    set -x
+  fi
+
   set -e
+  shopt -s nullglob
 
   find_resolve_tool
+
+  if [[ ! -f $1 ]]; then
+    cat <<EOF
+Usage: p3wm <pacnew file>
+
+Example: \`\`p3wm /etc/pacman.d/mirrorlist.pacnew''
+EOF
+    exit 1
+  fi
 
   set -u
 
