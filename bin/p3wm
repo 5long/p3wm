@@ -50,14 +50,23 @@ find_merge_tool() {
   fi
 
   if has_bin git; then
-    P3WM_MERGE_TOOL="git merge-file -p"
+    P3WM_MERGE_TOOL=builtin_merge_git
   elif has_bin merge; then
-    P3WM_MERGE_TOOL="merge -p"
+    P3WM_MERGE_TOOL=builtin_merge_merge
   else
     echo No merge tool available.
     echo "Please install git / rcs, or set a custom ‘\$P3WM_MERGE_TOOL’"
+    echo "See p3wm(8) for details"
     exit 5
   fi
+}
+
+builtin_merge_git() {
+  git merge-file -p "$@"
+}
+
+builtin_merge_merge() {
+  merge -p "$@"
 }
 
 
@@ -131,7 +140,7 @@ EOF
   tar xOf "$pkg_cached" "$bf_id" -- > "$bf_base"
   bf_merged="$(mktmp ".merged.$basename")"
 
-  if git merge-file -p "$bf_local" "$bf_base" "$bf_pacnew" > "$bf_merged"
+  if "$P3WM_MERGE_TOOL" "$bf_local" "$bf_base" "$bf_pacnew" > "$bf_merged"
   then
     echo M "$bf_local"
   else
