@@ -8,6 +8,10 @@ p3wm - Three-way merge .pacnew files
 
 _p3wm_ <pacnew file>
 
+## Installation
+
+p3wm can be installed from AUR: https://aur.archlinux.org/packages/p3wm/
+
 ## Description
 
 p3wm tries to merge a .pacnew file into its corresponding local backup (in the sense of *backup* in *PKGBUILD*(5)) file in a three-way merge fashion. p3wm tries to recover a copy of original backup file from pacman's package cache and uses it as the base of three-way merge.
