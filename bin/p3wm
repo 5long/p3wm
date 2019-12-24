@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+version=0.3.0
 
 tmpdir="${TMPDIR:-/tmp}/p3wm"
 create_tmp_root() {
@@ -99,9 +100,13 @@ main() {
 
   if [[ ! -f $1 ]]; then
     cat <<EOF
+p3wm(8) v$version
+
 Usage: p3wm <pacnew file>
 
 Example: ‘p3wm /etc/pacman.d/mirrorlist.pacnew’
+
+See ‘man 8 p3wm’ for detailed usage and configuration.
 EOF
     exit 1
   fi
