@@ -44,10 +44,6 @@ resolve_tool() {
   eval "$P3WM_RESOLVE_TOOL"
 }
 
-merge_tool_vim() {
-  vim -f -d -c '4wincmd w | wincmd J' "$@"
-}
-
 main() {
   bf_pacnew="$(realpath "$1")"
   bf_local="${bf_pacnew%.pacnew}"
