@@ -2,7 +2,7 @@
 
 ## Name
 
-p3wm - 3-way merge .pacnew files
+p3wm - Three-way merge .pacnew files
 
 ## Synopsis
 
