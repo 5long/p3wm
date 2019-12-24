@@ -32,6 +32,7 @@ find_merge_tool() {
   else
     echo No merge tool available.
     echo "Please install git / rcs, or set a custom \`\`\$P3WM_MERGE_TOOL''"
+    exit 5
   fi
 }
 
