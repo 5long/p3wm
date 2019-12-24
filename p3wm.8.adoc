@@ -14,6 +14,8 @@ p3wm tries to merge a .pacnew file into its corresponding local backup (in the s
 
 ## Environment
 
+p3wm can be configured by setting environment variables:
+
 *P3WM_DEBUG*::
   Debug with the `set -x` option of *bash*(1).
 
@@ -23,6 +25,8 @@ p3wm tries to merge a .pacnew file into its corresponding local backup (in the s
   - git-merge-file(1)
   - merge(1)
 
+You can skip the auto detection by setting *P3WM_CMD_MERGE=builtin_merge_git* or *P3WM_CMD_MERGE=builtin_merge_merge*.
+
 *Note*: in git(1)'s terms, git launches a "merge tool" to resolve merge conflicts. But in p3wm's terms, we use a merge tool to merge, and use a resolve tool to resolve conflicts if there are any.
 
 *P3WM_CMD_RESOLVE*::
@@ -31,6 +35,8 @@ p3wm tries to merge a .pacnew file into its corresponding local backup (in the s
   - kdiff3
   - meld
   - vim
+
+You can skip the auto detection by setting *P3WM_CMD_RESOLVE=builtin_resolve_<cmd>*. Example: if you have both *meld* and *vim* installed, p3wm will prefer *meld*. You can set *P3WM_CMD_RESOLVE=builtin_resolve_vim* to forcibly choose *vim*.
 
 When p3wm launches the resolve tool, *$P3WM_CMD_RESOLVE* is **eval**ed in *bash* with the following variables (which resembles how *git-mergetool*(1) works):
 
