@@ -22,7 +22,7 @@ find_resolve_tool() {
     P3WM_RESOLVE_TOOL='vim -f -d -c "4wincmd w | wincmd J" "$@"'
   else
     echo No resolve tool available.
-    echo "Please install vim / meld / kdiff3, or set a custom \`\`\$P3WM_RESOLVE_TOOL''"
+    echo "Please install vim / meld / kdiff3, or set a custom ‘\$P3WM_RESOLVE_TOOL’"
     exit 4
   fi
 }
@@ -42,7 +42,7 @@ find_merge_tool() {
     P3WM_MERGE_TOOL="merge -p"
   else
     echo No merge tool available.
-    echo "Please install git / rcs, or set a custom \`\`\$P3WM_MERGE_TOOL''"
+    echo "Please install git / rcs, or set a custom ‘\$P3WM_MERGE_TOOL’"
     exit 5
   fi
 }
@@ -79,7 +79,7 @@ main() {
     cat <<EOF
 Usage: p3wm <pacnew file>
 
-Example: \`\`p3wm /etc/pacman.d/mirrorlist.pacnew''
+Example: ‘p3wm /etc/pacman.d/mirrorlist.pacnew’
 EOF
     exit 1
   fi
@@ -112,7 +112,7 @@ EOF
   done
 
   if [[ -z $pkg_cached ]]; then
-    echo "Unable to find package \`\`$pkg_name-$oldver-$arch'' in cache"
+    echo "Unable to find package ‘$pkg_name-$oldver-$arch’ in cache"
     exit 2
   fi
 
