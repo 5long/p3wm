@@ -1,0 +1,53 @@
+# p3wm(8)
+
+## Name
+
+p3wm - 3-way merge .pacnew files
+
+## Synopsis
+
+_p3wm_ <pacnew file>
+
+## Description
+
+p3wm tries to merge a .pacnew file into its corresponding local backup (in the sense of *backup* in *PKGBUILD*(5)) file in a three-way merge fashion. p3wm tries to recover a copy of original backup file from pacman's package cache and uses it as the base of three-way merge.
+
+## Environment
+
+*P3WM_DEBUG*::
+  Debug with the `set -x` option of *bash*(1).
+
+*P3WM_CMD_MERGE*::
+  Override default merge tool. If unset, p3wm will detect existing merge tools in the following order:
+
+  - git-merge-file(1)
+  - merge(1)
+
+*Note*: in git(1)'s terms, git launches a "merge tool" to resolve merge conflicts. But in p3wm's terms, we use a merge to merge, and use a resolve tool to resolve conflicts if there are any.
+
+*P3WM_CMD_RESOLVE*::
+  Override default resolve tool. If unset, p3wm will detect existing resolve tools in the following order:
+
+  - kdiff3
+  - meld
+  - vim
+
+When p3wm launches the resolve tool, *$P3WM_CMD_RESOLVE* is **eval**ed in *bash* with the following variables (which resembles how *git-mergetool*(1) works):
+
+[%hardbreaks]
+*$LOCAL*: the local backup file that exists in current filesystem tree.
+*$BASE*: the base backup file, extracted from an old version of pacakge.
+*$REMOTE*: the .pacnew file created by *pacman -Syu*.
+*$MERGED*: the merged file with conflicts markers. Users of p3wm ares supposed to resolve all the conflicts in this file.
+
+## See Also
+
+*pacman*(8), *pacman.conf*(5)
+
+## Bugs
+
+For bug report, feature request, or any sorts of feedback, feel free to open an issue in the project's issue tracker: <https://github.com/5long/p3wm/issues>
+
+## Authors
+
+- Whyme Lyu <callme5long@gmail.com>
