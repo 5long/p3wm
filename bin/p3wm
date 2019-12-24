@@ -1,16 +1,18 @@
 #!/usr/bin/env bash
 
 find_resolve_tool() {
-  if [[ -z $P3WM_RESOLVE_TOOL ]]; then
-    if has_bin meld; then
-      P3WM_RESOLVE_TOOL='meld --auto-merge "$LOCAL" "$BASE" "$REMOTE" -o "$MERGED"'
-    elif has_bin vim; then
-      P3WM_RESOLVE_TOOL='vim -f -d -c "4wincmd w | wincmd J" "$@"'
-    else
-      echo No resolve tool available.
-      echo "Please install vim / meld, or set a custom \`\`\$P3WM_RESOLVE_TOOL''"
-      exit 4
-    fi
+  if [[ -n $P3WM_RESOLVE_TOOL ]]; then
+    return
+  fi
+
+  if has_bin meld; then
+    P3WM_RESOLVE_TOOL='meld --auto-merge "$LOCAL" "$BASE" "$REMOTE" -o "$MERGED"'
+  elif has_bin vim; then
+    P3WM_RESOLVE_TOOL='vim -f -d -c "4wincmd w | wincmd J" "$@"'
+  else
+    echo No resolve tool available.
+    echo "Please install vim / meld, or set a custom \`\`\$P3WM_RESOLVE_TOOL''"
+    exit 4
   fi
 }
 
