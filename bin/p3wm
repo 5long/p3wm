@@ -2,9 +2,9 @@
 
 find_resolve_tool() {
   if [[ -z $P3WM_RESOLVE_TOOL ]]; then
-    if type -P meld >/dev/null; then
+    if has_bin meld; then
       P3WM_RESOLVE_TOOL='meld --auto-merge "$LOCAL" "$BASE" "$REMOTE" -o "$MERGED"'
-    elif type -P vim >/dev/null; then
+    elif has_bin vim; then
       P3WM_RESOLVE_TOOL='vim -f -d -c "4wincmd w | wincmd J" "$@"'
     else
       echo No resolve tool available.
