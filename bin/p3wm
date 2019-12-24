@@ -102,8 +102,13 @@ EOF
   bf_base="$(mktmp ".base.$basename")"
 
   pkg_cached=""
-  for f in /var/cache/pacman/pkg/"$pkg_name"-"$oldver"-"$arch".pkg.* ; do
-    pkg_cached="$f"
+  mapfile -t cache_dirs < <(pacman-conf | awk '$1 == "CacheDir" {print $3}')
+  for cache_dir in "${cache_dirs[@]}"; do
+    echo DIR $cache_dir
+    for f in "$cache_dir/$pkg_name-$oldver-$arch".pkg.* ; do
+      echo FILE $f
+      pkg_cached="$f"
+    done
   done
 
   if [[ -z $pkg_cached ]]; then
