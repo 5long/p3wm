@@ -1,5 +1,5 @@
 PROG = p3wm
-PREFIX ?= /usr
+PREFIX ?= /usr/local
 
 .PHONY: doc install clean
 
