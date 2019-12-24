@@ -13,7 +13,7 @@ find_resolve_tool() {
     P3WM_RESOLVE_TOOL='vim -f -d -c "4wincmd w | wincmd J" "$@"'
   else
     echo No resolve tool available.
-    echo "Please install vim / meld, or set a custom \`\`\$P3WM_RESOLVE_TOOL''"
+    echo "Please install vim / meld / kdiff3, or set a custom \`\`\$P3WM_RESOLVE_TOOL''"
     exit 4
   fi
 }
