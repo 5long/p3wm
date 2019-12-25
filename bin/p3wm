@@ -114,6 +114,11 @@ EOF
 }
 
 verify_args() {
+  if [[ $# != 1 ]]; then
+    echo "$0 accepts one and only one argument."
+    exit 1
+  fi
+
   if [[ ! -f $1 ]]; then
     print_usage
     exit 1
