@@ -161,6 +161,15 @@ prepare_bf_merged() {
   mktmp ".merged.$basename_"
 }
 
+verify_bf_files() {
+  local bf_pacnew="$1" bf_local="$2"
+
+  if [[ $bf_pacnew = "$bf_local" ]]; then
+    echo "Filename doesn't end with .pacnew"
+    exit 3
+  fi
+}
+
 main() {
   set_debugging
   set_shopts
@@ -176,10 +185,7 @@ main() {
   bf_pacnew="$(realpath "$1")"
   bf_local="${bf_pacnew%.pacnew}"
 
-  if [[ $bf_pacnew = "$bf_local" ]]; then
-    echo 'You done messed up'
-    exit 3
-  fi
+  verify_bf_files "$bf_pacnew" "$bf_local"
 
   bf_base="$(prepare_bf_base "$bf_local")"
   bf_merged="$(prepare_bf_merged "$bf_local")"
