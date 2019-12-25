@@ -42,7 +42,7 @@ builtin_resolve_vim() {
 }
 
 has_bin() {
-  type -P "$1" >/dev/null
+  type -p "$1" >/dev/null
 }
 
 find_merge_tool() {
