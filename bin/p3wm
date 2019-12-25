@@ -222,7 +222,7 @@ main() {
         return 0
         ;;
       v|V)
-        diff -u "$bf_local" "$bf_merged" ||:
+        diff -u "$bf_local" "$bf_merged" | "${PAGER:-less}"
         ;;
       d|D)
         rm -v "$bf_pacnew"
