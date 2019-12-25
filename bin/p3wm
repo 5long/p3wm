@@ -120,6 +120,14 @@ verify_args() {
   fi
 }
 
+prepare_bf_base() {
+  bf_local="$1"
+  basename_=$(basename "$bf_local")
+  bf_base="$(mktmp ".base.$basename_")"
+
+  echo -n "$bf_base"
+}
+
 main() {
   set_debugging
   set_shopts
@@ -144,8 +152,7 @@ main() {
   oldver="${ver_tuple% *}"
 
   arch="$(get_pkg_arch "$pkg_name")"
-  basename=$(basename "$bf_local")
-  bf_base="$(mktmp ".base.$basename")"
+  bf_base="$(prepare_bf_base "$bf_local")"
 
   pkg_cached=""
   mapfile -t cache_dirs < <(pacman-conf CacheDir)
