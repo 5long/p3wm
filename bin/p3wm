@@ -151,6 +151,11 @@ prepare_bf_base() {
   echo -n "$bf_base"
 }
 
+prepare_bf_merged() {
+  basename_=$(basename "$1")
+  mktmp ".merged.$basename_"
+}
+
 main() {
   set_debugging
   set_shopts
@@ -172,7 +177,7 @@ main() {
   fi
 
   bf_base="$(prepare_bf_base "$bf_local")"
-  bf_merged="$(mktmp ".merged.$basename")"
+  bf_merged="$(prepare_bf_merged "$bf_local")"
 
   if "$P3WM_MERGE_TOOL" "$bf_local" "$bf_base" "$bf_pacnew" > "$bf_merged"
   then
