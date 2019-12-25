@@ -16,3 +16,8 @@ install:
 
 clean:
 	rm p3wm.8
+
+# This only pushes p3wm-git.
+# PKGBUILD for release version is maintained at: https://github.com/5long/pkgbuilds/tree/master/p3wm
+push-to-aur:
+	git subtree push -P makepkg ssh://aur@aur.archlinux.org/p3wm-git.git master
