@@ -157,8 +157,11 @@ find_cached_pkg() {
 }
 
 prepare_bf_merged() {
-  basename_=$(basename "$1")
-  mktmp ".merged.$basename_"
+  local bf_local="$1"
+  basename_=$(basename "$bf_local")
+  bf_merged="$(mktmp ".merged.$basename_")"
+  chmod --reference="$bf_local" "$bf_merged"
+  echo -n "$bf_merged"
 }
 
 verify_bf_files() {
@@ -207,7 +210,6 @@ main() {
     echo C "$bf_local" "cannot be cleanly merged"
   fi
 
-  chmod --reference="$bf_local" "$bf_merged"
 
   while ask_for_action; read -r answer; do
     case "$answer" in
