@@ -168,6 +168,16 @@ verify_bf_files() {
     echo "Filename doesn't end with .pacnew"
     exit 3
   fi
+
+  if [[ ! -f $bf_pacnew ]]; then
+    echo "File $bf_pacnew doesn't exist"
+    exit 6
+  fi
+
+  if [[ ! -f $bf_local ]]; then
+    echo "File $bf_local doesn't exist"
+    exit 7
+  fi
 }
 
 main() {
