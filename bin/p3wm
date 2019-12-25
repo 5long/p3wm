@@ -90,20 +90,19 @@ ask_for_action() {
   printf "(V)iew diff, (D)elete .pacnew, (A)ccept merge, (R)un resolve tool, (Q)uit? "
 }
 
-main() {
+set_debugging() {
   if [[ $P3WM_DEBUG = 1 ]]; then
     set -x
   fi
+}
 
+set_shopts() {
   set -e
   shopt -s nullglob
+}
 
-  create_tmp_root
-  find_merge_tool
-  find_resolve_tool
-
-  if [[ ! -f $1 ]]; then
-    cat <<EOF
+print_usage() {
+  cat <<EOF
 p3wm(8) v$version
 
 Usage: p3wm <pacnew file>
@@ -112,8 +111,24 @@ Example: ‘p3wm /etc/pacman.d/mirrorlist.pacnew’
 
 See ‘man 8 p3wm’ for detailed usage and configuration.
 EOF
+}
+
+verify_args() {
+  if [[ ! -f $1 ]]; then
+    print_usage
     exit 1
   fi
+}
+
+main() {
+  set_debugging
+  set_shopts
+
+  create_tmp_root
+  find_merge_tool
+  find_resolve_tool
+
+  verify_args "$@"
 
   set -u
 
