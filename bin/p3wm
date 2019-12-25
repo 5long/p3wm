@@ -127,21 +127,7 @@ prepare_bf_base() {
 
   ver_tuple="$(get_ver_tuple "$pkg_name")"
   oldver="${ver_tuple% *}"
-
-  arch="$(get_pkg_arch "$pkg_name")"
-
-  pkg_cached=""
-  mapfile -t cache_dirs < <(pacman-conf CacheDir)
-  for cache_dir in "${cache_dirs[@]}"; do
-    for f in "$cache_dir/$pkg_name-$oldver-$arch".pkg.* ; do
-      pkg_cached="$f"
-    done
-  done
-
-  if [[ -z $pkg_cached ]]; then
-    echo "Unable to find package ‘$pkg_name-$oldver-$arch’ in cache"
-    exit 2
-  fi
+  pkg_cached="$(find_cached_pkg "$pkg_name" "$oldver")"
 
   basename_=$(basename "$bf_local")
   bf_base="$(mktmp ".base.$basename_")"
@@ -149,6 +135,25 @@ prepare_bf_base() {
   tar xOf "$pkg_cached" "$bf_id" -- > "$bf_base"
 
   echo -n "$bf_base"
+}
+
+find_cached_pkg() {
+  local pkg_name="$1" ver="$2"
+  arch="$(get_pkg_arch "$pkg_name")"
+
+  mapfile -t cache_dirs < <(pacman-conf CacheDir)
+  for cache_dir in "${cache_dirs[@]}"; do
+    for f in "$cache_dir/$pkg_name-$ver-$arch".pkg.* ; do
+      pkg_cached="$f"
+    done
+  done
+
+  if [[ -z $pkg_cached ]]; then
+    echo "Unable to find package ‘$pkg_name-$ver-$arch’ in cache"
+    exit 2
+  fi
+
+  echo -n "$pkg_cached"
 }
 
 prepare_bf_merged() {
