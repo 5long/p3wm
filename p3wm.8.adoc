@@ -48,7 +48,7 @@ When p3wm launches the resolve tool, *$P3WM_CMD_RESOLVE* is **eval**ed in *bash*
 *$LOCAL*: the local backup file that exists in current filesystem tree.
 *$BASE*: the base backup file, extracted from an old version of pacakge.
 *$REMOTE*: the .pacnew file created by *pacman -Syu*.
-*$MERGED*: the merged file with conflicts markers. Users of p3wm ares supposed to resolve all the conflicts in this file.
+*$MERGED*: the merged file with conflicts markers. Users of p3wm are supposed to resolve all the conflicts in this file.
 
 ## See Also
 
