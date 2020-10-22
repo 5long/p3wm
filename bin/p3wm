@@ -78,7 +78,7 @@ get_ver_tuple() {
 }
 
 get_pkg_arch() {
-  pacman -Qi "$1" | awk '$1 == "Architecture" {print $3}'
+  LANG=C pacman -Qi "$1" | awk '$1 == "Architecture" {print $3}'
 }
 
 resolve_tool() {
