@@ -129,6 +129,9 @@ prepare_bf_base() {
   bf_local="$1"
 
   pkg_name="$(pacman -Qoq "$bf_local")"
+  if [[ -z "$pkg_name" ]]; then
+    exit 8
+  fi
 
   ver_tuple="$(get_ver_tuple "$pkg_name")"
   oldver="${ver_tuple% *}"
