@@ -136,6 +136,12 @@ prepare_bf_base() {
   ver_tuple="$(get_ver_tuple "$pkg_name")"
   oldver="${ver_tuple% *}"
   pkg_cached="$(find_cached_pkg "$pkg_name" "$oldver")"
+  arch="$(get_pkg_arch "$pkg_name")"
+
+  if [[ -z "$pkg_cached" ]]; then
+    echo "Unable to find package ‘$pkg_name-$oldver-$arch.pkg.*’ in cache" >&2
+    exit 2
+  fi
 
   basename_=$(basename "$bf_local")
   bf_base="$(mktmp ".base.$basename_")"
@@ -157,10 +163,12 @@ find_cached_pkg() {
     done
   done
 
-  if [[ -z $pkg_cached ]]; then
-    echo "Unable to find package ‘$pkg_name-$ver-$arch’ in cache"
-    exit 2
-  fi
+  ### XXX: this isn't working as intended cuz it's running in a subshell
+  #   Solution: rewrite the whole thing in a scripting language other than shell(?)
+  # if [[ -z $pkg_cached ]]; then
+  #   echo "Unable to find package ‘$pkg_name-$ver-$arch’ in cache"
+  #   exit 2
+  # fi
 
   echo -n "$pkg_cached"
 }
