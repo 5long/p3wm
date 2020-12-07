@@ -145,6 +145,7 @@ prepare_bf_base() {
 find_cached_pkg() {
   local pkg_name="$1" ver="$2"
   arch="$(get_pkg_arch "$pkg_name")"
+  local pkg_cached=""
 
   mapfile -t cache_dirs < <(pacman-conf CacheDir)
   for cache_dir in "${cache_dirs[@]}"; do
