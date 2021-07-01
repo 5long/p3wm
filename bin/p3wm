@@ -231,6 +231,7 @@ main() {
 
   if [[ "$P3WM_RESOLVE_TOOL" == 'auto-only' ]]; then
     if [[ $bf_success == 0 ]]; then
+      diff -u "$bf_local" "$bf_merged"
       mv -fv "$bf_merged" "$bf_local"
       rm -v "$bf_pacnew"
       exit 0
