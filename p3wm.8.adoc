@@ -42,6 +42,8 @@ You can skip the auto detection by setting *P3WM_CMD_MERGE=builtin_merge_git* or
 
 You can skip the auto detection by setting *P3WM_CMD_RESOLVE=builtin_resolve_<cmd>*. Example: if you have both *meld* and *vim* installed, p3wm will prefer *meld*. You can set *P3WM_CMD_RESOLVE=builtin_resolve_vim* to forcibly choose *vim*.
 
+The special value of 'auto-only' will skip prompt and any user interaction; it will automatically merge the file if it can be successfully auto-merged and exit if not, useful to automate trivial merges in eg. a pacman hook.
+
 When p3wm launches the resolve tool, *$P3WM_CMD_RESOLVE* is **eval**ed in *bash* with the following variables (which resembles how *git-mergetool*(1) works):
 
 [%hardbreaks]

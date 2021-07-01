@@ -220,13 +220,24 @@ main() {
   bf_base="$(prepare_bf_base "$bf_local")"
   bf_merged="$(prepare_bf_merged "$bf_local")"
 
-  if "$P3WM_MERGE_TOOL" "$bf_local" "$bf_base" "$bf_pacnew" > "$bf_merged"
-  then
+  "$P3WM_MERGE_TOOL" "$bf_local" "$bf_base" "$bf_pacnew" > "$bf_merged"
+  bf_success="$?"
+
+  if [[ $bf_success == 0 ]]; then
     echo M "$bf_local" "can be cleanly merged"
   else
     echo C "$bf_local" "cannot be cleanly merged"
   fi
 
+  if [[ "$P3WM_RESOLVE_TOOL" == 'auto-only' ]]; then
+    if [[ $bf_success == 0 ]]; then
+      mv -fv "$bf_merged" "$bf_local"
+      rm -v "$bf_pacnew"
+      exit 0
+    else
+      exit 8
+    fi
+  fi
 
   while ask_for_action; read -r answer; do
     case "$answer" in
