@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 version=0.6.2
 
-tmpdir="${TMPDIR:-/tmp}/p3wm"
+tmpdir="${TMPDIR:-/tmp}/p3wm-$UID"
 create_tmp_root() {
   mkdir -p "$tmpdir"
 }
@@ -159,7 +159,9 @@ find_cached_pkg() {
   mapfile -t cache_dirs < <(pacman-conf CacheDir)
   for cache_dir in "${cache_dirs[@]}"; do
     for f in "$cache_dir/$pkg_name-$ver-$arch".pkg.* ; do
-      pkg_cached="$f"
+      if [[ ${f##*.} != sig ]]; then
+        pkg_cached="$f"
+      fi
     done
   done
 

@@ -23,28 +23,28 @@ p3wm can be configured by setting environment variables:
 *P3WM_DEBUG*::
   Debug with the `set -x` option of *bash*(1).
 
-*P3WM_CMD_MERGE*::
+*P3WM_MERGE_TOOL*::
   Override default merge tool. If unset, p3wm will detect existing merge tools in the following order:
 
   - git-merge-file(1)
   - merge(1)
 
-You can skip the auto detection by setting *P3WM_CMD_MERGE=builtin_merge_git* or *P3WM_CMD_MERGE=builtin_merge_merge*.
+You can skip the auto detection by setting *P3WM_MERGE_TOOL=builtin_merge_git* or *P3WM_MERGE_TOOL=builtin_merge_merge*.
 
 *Note*: in git(1)'s terms, git launches a "merge tool" to resolve merge conflicts. But in p3wm's terms, we use a merge tool to merge, and use a resolve tool to resolve conflicts if there are any.
 
-*P3WM_CMD_RESOLVE*::
+*P3WM_RESOLVE_TOOL*::
   Override default resolve tool. If unset, p3wm will detect existing resolve tools in the following order:
 
   - kdiff3
   - meld
   - vim
 
-You can skip the auto detection by setting *P3WM_CMD_RESOLVE=builtin_resolve_<cmd>*. Example: if you have both *meld* and *vim* installed, p3wm will prefer *meld*. You can set *P3WM_CMD_RESOLVE=builtin_resolve_vim* to forcibly choose *vim*.
+You can skip the auto detection by setting *P3WM_RESOLVE_TOOL=builtin_resolve_<cmd>*. Example: if you have both *meld* and *vim* installed, p3wm will prefer *meld*. You can set *P3WM_RESOLVE_TOOL=builtin_resolve_vim* to forcibly choose *vim*.
 
 The special value of 'auto-only' will skip prompt and any user interaction; it will automatically merge the file if it can be successfully auto-merged and exit if not, useful to automate trivial merges in eg. a pacman hook.
 
-When p3wm launches the resolve tool, *$P3WM_CMD_RESOLVE* is **eval**ed in *bash* with the following variables (which resembles how *git-mergetool*(1) works):
+When p3wm launches the resolve tool, *$P3WM_RESOLVE_TOOL* is **eval**ed in *bash* with the following variables (which resembles how *git-mergetool*(1) works):
 
 [%hardbreaks]
 *$LOCAL*: the local backup file that exists in current filesystem tree.
