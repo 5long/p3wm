@@ -3,6 +3,7 @@
 name: Differential ShellCheck
 "on":
   pull_request:
+    types: [opened, reopened, synchronize]
     paths: [bin/p3wm]
 
 permissions:
