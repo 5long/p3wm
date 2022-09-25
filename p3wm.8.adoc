@@ -62,4 +62,4 @@ For bug report, feature request, or any sorts of feedback, feel free to open an 
 
 ## Authors
 
-- Whyme Lyu <callme5long@gmail.com>
+See Github Contributors: <https://github.com/5long/p3wm/graphs/contributors>
