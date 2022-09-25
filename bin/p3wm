@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 version=0.6.2
 
-tmpdir="${TMPDIR:-/tmp}/p3wm"
+tmpdir="${TMPDIR:-/tmp}/p3wm-$UID"
 create_tmp_root() {
   mkdir -p "$tmpdir"
 }
