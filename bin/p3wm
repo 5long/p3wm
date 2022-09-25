@@ -3,7 +3,7 @@ version=0.7.0
 
 tmpdir="${TMPDIR:-/tmp}/p3wm-$UID"
 create_tmp_root() {
-  mkdir -p $tmpdir
+  mkdir -p "$tmpdir"
 }
 
 mktmp() {
