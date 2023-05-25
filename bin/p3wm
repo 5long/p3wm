@@ -30,7 +30,7 @@ find_resolve_tool() {
 }
 
 builtin_resolve_kdiff3() {
-  kdiff3 --auto -o "$MERGED" "$BASE" "$LOCAL" "$REMOTE"
+  kdiff3 -o "$MERGED" "$BASE" "$LOCAL" "$REMOTE"
 }
 
 builtin_resolve_meld() {
