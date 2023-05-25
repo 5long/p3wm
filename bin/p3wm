@@ -222,8 +222,10 @@ main() {
   bf_base="$(prepare_bf_base "$bf_local")"
   bf_merged="$(prepare_bf_merged "$bf_local")"
 
-  "$P3WM_MERGE_TOOL" "$bf_local" "$bf_base" "$bf_pacnew" > "$bf_merged"
-  bf_success="$?"
+  bf_success=0
+
+  "$P3WM_MERGE_TOOL" "$bf_local" "$bf_base" "$bf_pacnew" > "$bf_merged" \
+    || bf_success="$?"
 
   if [[ $bf_success == 0 ]]; then
     echo M "$bf_local" "can be cleanly merged"
